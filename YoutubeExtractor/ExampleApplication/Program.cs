@@ -5,12 +5,9 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using YoutubeExtractor;
 
-namespace ExampleApplication
-{
-    internal class Program
-    {
-        private static void DownloadAudio(IEnumerable<VideoInfo> videoInfos)
-        {
+namespace ExampleApplication {
+    internal class Program {
+        private static void DownloadAudio(IEnumerable<VideoInfo> videoInfos) {
             /*
              * We want the first extractable video with the highest audio quality.
              */
@@ -22,8 +19,7 @@ namespace ExampleApplication
             /*
              * If the video has a decrypted signature, decipher it
              */
-            if (video.RequiresDecryption)
-            {
+            if(video.RequiresDecryption) {
                 DownloadUrlResolver.DecryptDownloadUrl(video);
             }
 
@@ -50,19 +46,17 @@ namespace ExampleApplication
             audioDownloader.Execute();
         }
 
-        private static void DownloadVideo(IEnumerable<VideoInfo> videoInfos)
-        {
+        private static void DownloadVideo(IEnumerable<VideoInfo> videoInfos) {
             /*
              * Select the first .mp4 video with 360p resolution
              */
             VideoInfo video = videoInfos
-                .First(info => info.VideoType == VideoType.Mp4 && info.Resolution == 360);
+                .OrderByDescending(v => v.Resolution).First(info => info.VideoType == VideoType.Mp4);
 
             /*
              * If the video has a decrypted signature, decipher it
              */
-            if (video.RequiresDecryption)
-            {
+            if(video.RequiresDecryption) {
                 DownloadUrlResolver.DecryptDownloadUrl(video);
             }
 
@@ -85,10 +79,9 @@ namespace ExampleApplication
             videoDownloader.Execute();
         }
 
-        private static void Main()
-        {
+        private static void Main() {
             // Our test youtube link
-            const string link = "http://www.youtube.com/watch?v=O3UBOOZw-FE";
+            const string link = "https://www.youtube.com/watch?v=cHHLHGNpCSA";
 
             /*
              * Get the available video formats.
@@ -98,10 +91,10 @@ namespace ExampleApplication
 
             //DownloadAudio(videoInfos);
             DownloadVideo(videoInfos);
+
         }
 
-        private static string RemoveIllegalPathCharacters(string path)
-        {
+        private static string RemoveIllegalPathCharacters(string path) {
             string regexSearch = new string(Path.GetInvalidFileNameChars()) + new string(Path.GetInvalidPathChars());
             var r = new Regex(string.Format("[{0}]", Regex.Escape(regexSearch)));
             return r.Replace(path, "");
