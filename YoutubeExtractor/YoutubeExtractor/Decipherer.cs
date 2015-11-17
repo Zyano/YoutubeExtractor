@@ -9,7 +9,7 @@ namespace YoutubeExtractor
     {
         public static string DecipherWithVersion(string cipher, string cipherVersion)
         {
-            string jsUrl = string.Format("http://s.ytimg.com/yts/jsbin/html5player-{0}.js", cipherVersion);
+            string jsUrl = string.Format("http://s.ytimg.com/yts/jsbin/player-{0}.js", cipherVersion);
             string js = HttpHelper.DownloadString(jsUrl);
 
             //Find "C" in this: var A = B.sig||C (B.s)
@@ -24,7 +24,9 @@ namespace YoutubeExtractor
 
             string funcBodyPattern = @"(?<brace>{([^{}]| ?(brace))*})";  //Match nested angle braces
             string funcPattern = string.Format(@"{0}\(\w+\){1}", @funcName, funcBodyPattern); //Escape funcName string
-            var funcBody = Regex.Match(js, funcPattern).Groups["brace"].Value; //Entire sig function
+            string funcPattern2 = @"var " + @funcName + @"=function\(\w+\)\{.*?\};";
+            var funcBody = Regex.Match(js, funcPattern2).Value; //Entire sig function
+            
             var lines = funcBody.Split(';'); //Each line in sig function
 
             string idReverse = "", idSlice = "", idCharSwap = ""; //Hold name for each cipher method
@@ -65,12 +67,12 @@ namespace YoutubeExtractor
                 Match m;
                 functionIdentifier = GetFunctionFromLine(line);
 
-                if ((m = Regex.Match(line, @"\(\w+,.(?<index>\d+)\)")).Success && functionIdentifier == idCharSwap)
+                if ((m = Regex.Match(line, @"\(\w+,(?<index>\d+)\)")).Success && functionIdentifier == idCharSwap)
                 {
                     operations += "w" + m.Groups["index"].Value + " "; //operation is a swap (w)
                 }
 
-                if ((m = Regex.Match(line, @"\(\w+,.(?<index>\d+)\)")).Success && functionIdentifier == idSlice)
+                if ((m = Regex.Match(line, @"\(\w+,(?<index>\d+)\)")).Success && functionIdentifier == idSlice)
                 {
                     operations += "s" + m.Groups["index"].Value + " "; //operation is a slice
                 }
