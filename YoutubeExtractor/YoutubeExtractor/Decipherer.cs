@@ -65,12 +65,12 @@ namespace YoutubeExtractor
                 Match m;
                 functionIdentifier = GetFunctionFromLine(line);
 
-                if ((m = Regex.Match(line, @"\(\w+,(?<index>\d+)\)")).Success && functionIdentifier == idCharSwap)
+                if ((m = Regex.Match(line, @"\(\w+,.(?<index>\d+)\)")).Success && functionIdentifier == idCharSwap)
                 {
                     operations += "w" + m.Groups["index"].Value + " "; //operation is a swap (w)
                 }
 
-                if ((m = Regex.Match(line, @"\(\w+,(?<index>\d+)\)")).Success && functionIdentifier == idSlice)
+                if ((m = Regex.Match(line, @"\(\w+,.(?<index>\d+)\)")).Success && functionIdentifier == idSlice)
                 {
                     operations += "s" + m.Groups["index"].Value + " "; //operation is a slice
                 }
