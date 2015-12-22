@@ -22,16 +22,9 @@ namespace YoutubeExtractor
                 funcName = "\\" + funcName; //Due To Dollar Sign Introduction, Need To Escape
             }
 
-<<<<<<< HEAD
-            string funcBodyPattern = @"(?<brace>{([^{}]| ?(brace))*})";  //Match nested angle braces
-            string funcPattern = string.Format(@"{0}\(\w+\){1}", @funcName, funcBodyPattern); //Escape funcName string
-            string funcPattern2 = @"var " + @funcName + @"=function\(\w+\)\{.*?\};";
-            var funcBody = Regex.Match(js, funcPattern2).Value; //Entire sig function
-            
-=======
+
             string funcPattern = @funcName + @"=function\(\w+\)\{.*?\},"; //Escape funcName string
             var funcBody = Regex.Match(js, funcPattern, RegexOptions.Singleline).Value; //Entire sig function
->>>>>>> 1c6d99c916f4479af628e69a4390690c6c412d1b
             var lines = funcBody.Split(';'); //Each line in sig function
 
             string idReverse = "", idSlice = "", idCharSwap = ""; //Hold name for each cipher method
