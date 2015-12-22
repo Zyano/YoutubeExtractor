@@ -206,8 +206,14 @@ namespace YoutubeExtractor {
             return Decipherer.DecipherWithVersion(signature, htmlPlayerVersion);
         }
 
+<<<<<<< HEAD
         private static string GetHtml5PlayerVersion(JObject json) {
             var regex = new Regex(@"player-(.+?)\.js");
+=======
+        private static string GetHtml5PlayerVersion(JObject json)
+        {
+            var regex = new Regex(@"player-(.+?).js");
+>>>>>>> 1c6d99c916f4479af628e69a4390690c6c412d1b
 
             string js = json["assets"]["js"].ToString();
 
