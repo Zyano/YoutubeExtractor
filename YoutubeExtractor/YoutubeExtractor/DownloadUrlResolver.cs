@@ -188,13 +188,14 @@ namespace YoutubeExtractor {
         }
 
         private static string GetAdaptiveStreamMap(JObject json) {
-            try {
-                JToken streamMap = json["args"]["adaptive_fmts"];
-
-                return streamMap.ToString();
-            } catch {
-                return string.Empty;
+            JToken streamMap = json["args"]["adaptive_fmts"];
+            // bugfix: adaptive_fmts is missing in some videos, use url_encoded_fmt_stream_map instead
+            if (streamMap == null)
+            {
+              streamMap = json["args"]["url_encoded_fmt_stream_map"];
             }
+
+            return streamMap.ToString();
         }
 
         private static string GetDecipheredSignature(string htmlPlayerVersion, string signature) {
