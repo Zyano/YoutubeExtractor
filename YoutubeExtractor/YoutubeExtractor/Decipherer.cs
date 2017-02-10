@@ -25,7 +25,9 @@ namespace YoutubeExtractor
 
             string funcPattern = @funcName + @"=function\(\w+\)\{.*?\},"; //Escape funcName string
             var funcBody = Regex.Match(js, funcPattern, RegexOptions.Singleline).Value; //Entire sig function
-            var lines = funcBody.Split(';'); //Each line in sig function
+            var lines = funcBody.Substring(funcBody.IndexOf('{')).Split(';'); //Each line in sig function
+
+            
 
             string idReverse = "", idSlice = "", idCharSwap = ""; //Hold name for each cipher method
             string functionIdentifier = "";
@@ -60,7 +62,7 @@ namespace YoutubeExtractor
                 }
             }
 
-            foreach (var line in lines.Skip(1).Take(lines.Length - 2))
+            foreach (var line in lines.Take(lines.Length - 2))
             {
                 Match m;
                 functionIdentifier = GetFunctionFromLine(line);
